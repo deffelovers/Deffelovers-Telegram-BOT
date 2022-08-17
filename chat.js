@@ -1,9 +1,18 @@
 // pustaka lokal
 // const {} = require()
 
+// list perintah
+const {start} = require('./lib/utils/commandList');
+
 // modul pengolah pesan
 module.exports = {
-    inMessage: (ctx, bot) => {
+    inMessage: async (ctx, bot) => {
+
+        // info bot
+        const botInfo = ctx.botInfo,
+        botId = botInfo.id,
+        botName = botInfo.first_name,
+        botUserName = botInfo.username;
 
         // tipe media
         const photo = ctx.message.photo,
@@ -15,6 +24,10 @@ module.exports = {
         const isprivate = ctx.message.chat.type === 'private',
         isadmin = ctx.message.chat.type === 'supergroup';
 
+        // filter pesan
+        const text = ctx.message.text,
+        cmd = text?.split(' ')[0].toLowerCase();
+
         // aksi chat
         const typing = () => bot.telegram.sendChatAction(ctx.chat.id, 'typing'),
         upPhoto = () => bot.telegram.sendChatAction(ctx.chat.id, 'upload_photo'),
@@ -23,7 +36,9 @@ module.exports = {
         upDocument = () => bot.telegram.sendChatAction(ctx.chat.id, 'upload_document');
 
         // pengolahan pesan
-        console.log(ctx);
+        cmd === '/start' || cmd === `/start${botName}`
+            ? typing() + ctx.reply(start(botName, '4.0'))
+        : ''
     },
     inQuery: function(){}
 }
