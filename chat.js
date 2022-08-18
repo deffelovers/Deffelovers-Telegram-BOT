@@ -36,9 +36,11 @@ module.exports = {
         upDocument = () => bot.telegram.sendChatAction(ctx.chat.id, 'upload_document');
 
         // pengolahan pesan.
-        cmd === '/start' || cmd === `/start${botName}`
-            ? typing() + ctx.reply(start(botName, '4.0'))
-        : ''
+        cmd === '/start' || cmd === `/start${botUserName}`
+            ? typing() && ctx.reply(start(botName, '4.0'))
+
+        // fitur Google
+        : cmd === '/trs' || cmd === `/trs${botUserName}`
     },
     inQuery: function(){}
 }

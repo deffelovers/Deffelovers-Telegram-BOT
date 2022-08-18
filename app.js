@@ -20,8 +20,8 @@ const thisBot = {
 },
 Downloaded = {
 
-    // berisi nilai pengguna yang sedang mengunduh.
-    list: [1, 2, 12],
+    // berisi id pengguna yang sedang mengunduh.
+    list: [],
 
     /*
         Sebuah fungsi untuk menambahkan pengguna yang sedang mengunduh,
