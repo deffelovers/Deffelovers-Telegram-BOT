@@ -49,4 +49,7 @@ Downloaded = {
 // pengolah pesan.
 bot.on('message', (ctx) => chat.inMessage(ctx, bot, Downloaded))
 
-// bot.launch()
+bot.launch()
+
+process.once('SIGINT', () => bot.stop('SIGINT'))
+process.once('SIGTERM', () => bot.stop('SIGTERM'))
