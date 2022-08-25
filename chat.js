@@ -6,7 +6,7 @@ module.exports = {
     inMessage: async (ctx, bot, Downloaded) => {
 
         // berisi fungsi untuk menjalankan perintah
-        const run = require('./lib/utils/chat.function').messageFunction(ctx, bot);
+        const run = require('./lib/utils/chat.function').messageFunction(ctx, bot, Downloaded);
 
         // info bot.
         const botInfo = ctx.botInfo,
@@ -16,35 +16,27 @@ module.exports = {
 
         // filter pesan.
         const text = ctx.message.text.split(' '),
-        cmd = text[0]?.toLowerCase(),
-        args = {
-            full: text?.slice(1).join(' '),
-            intCheck: text?.slice(1).join(' ').match('/'),
-            int0: text?.slice(1).join(' ').match('/')?.input.split('/')[0].replace(/\s/g, ''),
-            int1: text?.slice(1).join(' ').match('/')?.input.split('/')[1].replace(/^\s|\s\s+/g, '')
-        };
+        cmd = {
+            int: text?.[0].match(/(\/\w+\@?\w+)\.(\w+)?/)?.[1]??text?.[0],
+            id: text?.[0].match(/(\/\w+\@?\w+)\.(\w+)?/)?.[2]
+        } 
+        args = text?.slice(1).join(' ').replace(/^\s|\s\s+/g, '\n\n');
 
         // pengolahan pesan.
 
         // fitur Basic.
-        cmd === '/start' || cmd === `/start${botUserName}`
-            ? text.length < 2
-                ? run.feature.call.start()
-            : run.isFromButton(args.full)
+        cmd.int === '/start' || cmd.int === `/start@${botUserName}`
+            ? run.feature.Basic.start()
 
         // fitur Google.
-        : cmd === '/trs' || cmd === `/trs${botUserName}`
-            ? text.length > 1
-                ? args.intCheck
-                    ? run.Google.translate(args.int0, args.int1)
-                : run.isInvalid('/trs')
-            : run.feature.call.Google.isTranslate()
-        : cmd === '/tts' || cmd === `/tts${botUserName}`
-            ? text.length > 1
-                ? args.intCheck
-                    ? run.Google.textToSpeech(args.int0, args.int1)
-                : run.isInvalid('/tts')
-            : run.feature.call.Google.isTextToSpeech()
+        : cmd.int === '/trs' || cmd.int === `/trs@${botUserName}`
+            ? cmd.id
+                ? run.feature.Google.translate(cmd.id, args)
+            : run.feature.Google.isTranslate()
+        : cmd.int === '/tts' || cmd.int === `/tts@${botUserName}`
+            ? cmd.id
+                ? run.feature.Google.textToSpeech(cmd.id, args)
+            : run.feature.Google.isTextToSpeech()
         : ''
     },
     inQuery: function(){}

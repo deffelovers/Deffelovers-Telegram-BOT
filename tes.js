@@ -21,6 +21,24 @@ async function tes(){
         // jawaban: 
             
         // let contoh_kata = 'halo selamat pagi  siang'
+        let input = [
+            'Sebut namaku saat pohon susurat\n',
+            'Sekali lagi menceritakan kisah yang hilang ditelan waktu\n',
+            'Cara memulai dan cara berakhir\n',
+            'Jangan pernah lagi mengarang cerita dengan cemas\n',
+            'Dengan beberapa awal, tapi hanya satu akhir Ah, betapa aku rindu untuk memeluk\n',
+            'Masa depan pecah dari nuansa masa lalu\n',
+            'Masih menyalaSimpan air matamu untuk hari yang begitu jauh\n',
+            'Untuk mengairi hutan belantara yang masih tertidur\n',
+            'Di dunia menunggu untuk dinyalakan\n',
+            'Menyebar di dasar sungai, begitu kering dan mati\n',
+            'Biarkan kapal yang kandas kembali meluncurkan layarnya Ah, betapa aku ingin memeluknya\n',
+            'Masa depan pecah dari nuansa masa lalu\n',
+            'Masih menyalaBiji melahirkan kehidupan baru ketika bunga berani memudarKelopak berlama-lama\n',
+            'Menunggu satu tarian terakhir\n',
+            'Mengusir semua debu dari masa lalu\n',
+            'Cerita baru belum dimulai'
+          ]
         console.log(
             
             
@@ -28,7 +46,11 @@ async function tes(){
             
             // // output: kata ini tidak memiliki tanda `/`
 
-            '/tes cpu'.match(/^\/\w+/)?.[0]
+            input.join('')
+            // input.match(/(\/\w+\@?\w+)\.(\w+)?/)??input
+            // .match(/(\/\w+)\.(\w+)/)?.[1]??input.split(' ')?.[0]
+            
+            // .match(/^\/\w+/)?.[0]
             
             
         )
