@@ -47,9 +47,11 @@ Downloaded = {
 
 
 // pengolah pesan.
-bot.on('message', (ctx) => chat.inMessage(ctx, bot, Downloaded))
+bot.on('message', (ctx) => chat.process(ctx, bot, Downloaded).inMessage())
+
+bot.action(/[\S]+/, (ctx) => chat.process(ctx, bot, Downloaded).inCallbackData())
 
 bot.launch()
 
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
+// process.once('SIGINT', () => bot.stop('SIGINT'))
+// process.once('SIGTERM', () => bot.stop('SIGTERM'))
