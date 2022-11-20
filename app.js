@@ -17,7 +17,7 @@ const thisBot = {
     status: process.env.isBotOn,
 
     // sebuah fungsi untuk mengubah nilai 'isBotOn' dari conf.txt.
-    setStatus: (boolean) => env('isBotOn', boolean)
+    setStatus: (boolean) => env('isBotOn', boolean, conf)
 },
 Downloaded = {
 
@@ -29,67 +29,32 @@ Downloaded = {
         fungsi ini memblokir pengguna agar tidak mengunduh lebih dari 1x,
         untuk mencegah bentrokan unduhan yang dapat membuat bot error.
     */
-    add: (usrId) => this,
-    //  this.list.length > 0
-    //         ? this.list.filter(x => x === usrId)[0]
-    //             ?? this.list.push(usrId)
-    //     : this.list.push(usrId),
+    add: function(usrId){
+        return this.list.length > 0
+            ? this.list.filter(x => x === usrId)[0]
+                ?? this.list.push(usrId)
+        : this.list.push(usrId)
+    },
 
     /*
         Sebuah fungsi untuk menghapus id pengguna dalam daftar unduhan,
         agar pengguna bisa mengunduh file kembali.
     */
-    remove: (usrId) => this.list.indexOf(usrId)
+    remove: function(usrId){
+        return this.list.indexOf(usrId)
             ?? this.list.splice(this.list.indexOf(usrId), 1)
+    }
 };
 
 // pengolah pesan.
-// bot.on('message', (ctx) => chat.process(ctx, bot, Downloaded).inMessage())
-//     .catch((e) => console.log('\x1b[31m', e))
+bot.on('message', (ctx) => chat(ctx, bot, Downloaded).inMessage())
+    .catch((e) => console.log('\x1b[31m', e))
     
-// bot.action(/[\S]+/, (ctx) => chat.process(ctx, bot, Downloaded).inCallbackData())
-//     .catch((e) => console.log('\x1b[31m', e))
+bot.action(/[\S]+/, (ctx) => chat(ctx, bot, Downloaded).inCallbackData())
+    .catch((e) => console.log('\x1b[31m', e))
 
-// // fungsi menjalankan bot
-// bot.launch()
-//     .finally(() => console.log('\x1b[36m', 'Launching....'))
-//     .then(() => console.log('\x1b[32m','Bot is now running.'))
-//     .catch((e) => console.log('\x1b[31m', e))
-
-
-
-
-console.log(Downloaded.list);
-
-console.log(
-
-Downloaded.add(123)
-
-
-);
-
-// console.log(Downloaded.add(123));
-// console.log(Downloaded.list);
-
-
-
-
-
-
-
-
-
-
-
-
-    // console.log('\x1b[31m', e)
-// if(!bot.token) return console.log('ups no token!!');
-
-// bot.token
-//     ? console.log('yes token')
-//     : console.log('no token')
-//     ?? console.log('yes');
-// bot.launch()??console.log('lol go ahead');
-
-// process.once('SIGINT', () => bot.stop('SIGINT'))
-// process.once('SIGTERM', () => bot.stop('SIGTERM'))
+// fungsi menjalankan bot
+bot.launch()
+    .finally(() => console.log('\x1b[36m', 'Launching....'))
+    .then(() => console.log('\x1b[32m','Bot is now running.'))
+    .catch((e) => console.log('\x1b[31m', e))
