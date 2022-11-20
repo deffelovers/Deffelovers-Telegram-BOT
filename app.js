@@ -1,13 +1,14 @@
-// konfigurasi env.
-require('dotenv').config({path: 'conf.txt'});
+// pemeriksaan conf.txt
+const fs = require('fs'), conf = 'bot.config.env', devMode = 'dev.config.env'
+fs.existsSync(devMode)
+    ? require('dotenv').config({path: devMode})
+: require('dotenv').config({path: conf})
 
 // konfigurasi komponen & telegram bot.
 const {Telegraf} = require('telegraf'),
 bot = new Telegraf(process.env.BOT_TOKEN),
 env = require('./lib/utils/env'),
-//
-chat = require('./chat.js');
-
+chat = require('./lib/utils/chat.js');
 
 // cache
 const thisBot = {
@@ -21,37 +22,74 @@ const thisBot = {
 Downloaded = {
 
     // berisi id pengguna yang sedang mengunduh.
-    list: [],
+    list: new Array(),
 
     /*
-        Sebuah fungsi untuk menambahkan pengguna yang sedang mengunduh,
+        Sebuah fungsi untuk menambahkan id pengguna ke daftar unduhan,
         fungsi ini memblokir pengguna agar tidak mengunduh lebih dari 1x,
         untuk mencegah bentrokan unduhan yang dapat membuat bot error.
     */
-    add: function(usrId){
-        return this.list.length > 0
-            ? this.list.filter(x => x === usrId)[0]
-                ?? this.list.push(usrId)
-        : this.list.push(usrId)
-    },
+    add: (usrId) => this,
+    //  this.list.length > 0
+    //         ? this.list.filter(x => x === usrId)[0]
+    //             ?? this.list.push(usrId)
+    //     : this.list.push(usrId),
 
     /*
-        Sebuah fungsi untuk menghapus pengguna yang sedang mengunduh,
+        Sebuah fungsi untuk menghapus id pengguna dalam daftar unduhan,
         agar pengguna bisa mengunduh file kembali.
     */
-    remove: function(usrId){
-        return this.list.indexOf(usrId)
+    remove: (usrId) => this.list.indexOf(usrId)
             ?? this.list.splice(this.list.indexOf(usrId), 1)
-    }
 };
 
-
 // pengolah pesan.
-bot.on('message', (ctx) => chat.process(ctx, bot, Downloaded).inMessage())
+// bot.on('message', (ctx) => chat.process(ctx, bot, Downloaded).inMessage())
+//     .catch((e) => console.log('\x1b[31m', e))
+    
+// bot.action(/[\S]+/, (ctx) => chat.process(ctx, bot, Downloaded).inCallbackData())
+//     .catch((e) => console.log('\x1b[31m', e))
 
-bot.action(/[\S]+/, (ctx) => chat.process(ctx, bot, Downloaded).inCallbackData())
+// // fungsi menjalankan bot
+// bot.launch()
+//     .finally(() => console.log('\x1b[36m', 'Launching....'))
+//     .then(() => console.log('\x1b[32m','Bot is now running.'))
+//     .catch((e) => console.log('\x1b[31m', e))
 
-bot.launch()
+
+
+
+console.log(Downloaded.list);
+
+console.log(
+
+Downloaded.add(123)
+
+
+);
+
+// console.log(Downloaded.add(123));
+// console.log(Downloaded.list);
+
+
+
+
+
+
+
+
+
+
+
+
+    // console.log('\x1b[31m', e)
+// if(!bot.token) return console.log('ups no token!!');
+
+// bot.token
+//     ? console.log('yes token')
+//     : console.log('no token')
+//     ?? console.log('yes');
+// bot.launch()??console.log('lol go ahead');
 
 // process.once('SIGINT', () => bot.stop('SIGINT'))
 // process.once('SIGTERM', () => bot.stop('SIGTERM'))

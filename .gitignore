@@ -1,4 +1,5 @@
 node_modules
 conf.txt
+dev.config.env
 konsep.txt
 tes.js
