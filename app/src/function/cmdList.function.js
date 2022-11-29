@@ -12,25 +12,23 @@
 
 // Tema menu
 const themes = {
-    'classic': ['━━━━━━━━『#』━━━━━━━━', '━━━━', '┓', '┛'],
-    'custom': []
+    classic: ['━━━━━━━━『\\#』━━━━━━━━', '━━━━', '┓', '┛'],
+    custom: []
 },
 
 menuStyle = {
-    'commandList': (theme, output) => `${themes[theme][0]}\n${output}\n${themes[theme][0]}`,
-    'helpCommand': (theme, output) => `${themes[theme][0]}\n${output.cmd}\n${themes[theme][1]}\n${output.des}\n\n${output.exa}\n${themes[theme][0]}`
+    commandList: (theme, output) => `\*${themes[theme][0]}\*\n${output}\n\*${themes[theme][0]}\*`,
+    helpCommand: (theme, output) => `\*${themes[theme][0]}\*\n${output.cmd}\n\*${themes[theme][1]}\*\n${output.des}\n\n${output.exa}\n\*${themes[theme][0]}\*`
 },
 menuType = (theme, type, object) => menuStyle[type](theme, object)
     ?? (function(){throw new Error('tidak ada tipe menu yang cocok!')}()),
 
 
 listStyle = {
-    'arrow': (output) => output.map(e => `${e?.name}\n${e.item?.map(e => `➜ ${e}`).join('\n')}`),
-    'dot': (output) => output.map(e => `${e?.name}\n${e.item?.map(e => `• ${e}`).join('\n')}`),
-    // 'pin': (output) => output.map(e => `${e?.name}\n${e.item?.map(e => `📌 ${e}`).join('\n')}`),
+    'arrow': '➜',
+    'dot': '•',
 },
-listType = (style, output) => listStyle[style]?.(output)
-    ?? (function(){throw new Error('tidak ada gaya list yang cocok!')}())
+listType = (style, output) => output.map(e => `\*${e?.name}\*\n${e.item?.map(e => `\*${listStyle[style]}\* ${e}`).join('\n')}`),
 
 /*
    
@@ -47,15 +45,13 @@ const menu = {
 
     // menu
     start: generate({
-        input: generate({
-            input: [
-                {name: 'Menu', item: ['/start']},
-                {name: 'Owner Bot Menu', item: ['/log']},
-                {name: 'Personal Menu', item: ['/profile', '/menuStyle']},
-                {name: 'Group Chat', item: ['/', '/menu', '/anjay']},
-            ]
-        }).list({style: 'dot'}).join('\n\n')
-    }).menu({theme: 'classic', type: 'commandList'})
+        input: [
+            {name: 'Menu', item: ['/start']},
+            {name: 'Owner Bot Menu', item: ['/log [coming soon]', '/bot\ [coming soon]']},
+            {name: 'Personal Menu', item: ['/profile', '/menuStyle [coming soon]']},
+            {name: 'Group Chat', item: ['/group [coming soon]', '/kick [coming soon]', '/mute [coming soon]', '/unmute [coming soon]']},
+        ]
+    }).list({style: 'dot'}).join('\n\n')
 };
 
 

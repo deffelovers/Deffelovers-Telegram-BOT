@@ -1,5 +1,5 @@
 // list perintah
-const cmdl = require("./command.List");
+const cmdl = require("./cmdList.function");
 
 
 module.exports = (ctx, bot, Downloaded) => {
@@ -21,14 +21,13 @@ module.exports = (ctx, bot, Downloaded) => {
     isadmin = ctx.message?.chat.type === 'supergroup';
 
     // filter pesan.
-    const text = ctx.message?.text.split(' ')
-        ?? ctx.match.input.split(' '),
-    cmd = {
-        int: text?.[0].match(/(\/\w+\@?\w+)\.(\w+)?/)?.[1]
-            ?? text?.[0],
-        id: text?.[0].match(/(\/\w+\@?\w+)\.(\w+)?/)?.[2]
-    },
-    args = text?.slice(1).join(' ');//.replace(/^\s|\s\s+/g, '\n\n');
+    const text = ctx.message?.text?.split(' ')
+        ?? ctx.match.input?.split(' '),
+    cmd = text?.[0].match(/(\/\w+\@?\w+)\.(\w+)?/)?.[1]
+        ?? text?.[0],
+    cmdSplit = text?.[0].match(/(\/\w+\@?\w+)\.(\w+)?/)?.[2],
+    msgReply = ctx.message.reply_to_message,
+    textSource = text?.slice(1).join(' ');//.replace(/^\s|\s\s+/g, '\n\n');
 
     // aksi chat.
     const typing = () => bot.telegram.sendChatAction(ctx.chat.id, 'typing'),
@@ -37,12 +36,22 @@ module.exports = (ctx, bot, Downloaded) => {
     upVoice = () => bot.telegram.sendChatAction(ctx.chat.id, 'upload_voice'),
     upDocument = () => bot.telegram.sendChatAction(ctx.chat.id, 'upload_document');
 
+    // komponen chat.
+    const reply_message = () => {return {reply_to_message_id:ctx.message?.message_id}},
+    reply_markdown = () => {return {parse_mode: 'markdownV2', reply_to_message_id:ctx.message?.message_id}},
+    reply_markdown_with_button = (arrBtn) => {return {reply_markup: {inline_keyboard: arrBtn}, parse_mode: 'markdownV2', reply_to_message_id:ctx.message?.message_id}}    
+
     // pengolahan pesan.
     return {
         inQuery: () => {},
-        inMessage: () => 
-            cmd.int === '/start' || cmd.int === `/start@${botUserName}`
-                ? typing() && ctx.reply(cmdl.menu)
+        inMessage: async () => 
+            cmd === '/start' || cmd === `/start@${botUserName}`
+                ? typing() && ctx.reply(cmdl.menu, reply_toMessage_markdown)
+
+
+            // fitur group
+            : cmd === '/kick' || cmd === `/kick@${botUserName}`
+                ? console.log(reply_message())
             : ''
             ,
         inCallbackData: () => {}

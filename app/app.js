@@ -1,14 +1,28 @@
 // pemeriksaan conf.txt
-const fs = require('fs'), conf = 'bot.config.env', devMode = 'dev.config.env'
+const fs = require('fs'), conf = './app/src/env/bot.config.env', devMode = './app/src/env/dev.config.env', proxy=process.env.PROXY_ON;
 fs.existsSync(devMode)
     ? require('dotenv').config({path: devMode})
 : require('dotenv').config({path: conf})
 
 // konfigurasi komponen & telegram bot.
-const {Telegraf} = require('telegraf'),
-bot = new Telegraf(process.env.BOT_TOKEN),
-env = require('./lib/utils/env'),
-chat = require('./lib/utils/chat.js');
+const { Telegraf } = require('telegraf'),
+httpProxyAgent = require('https-proxy-agent'),
+bot = proxy
+
+    // konfigurasi bot dengan proxy, ini hanya untuk mode pengembangan!!.
+    ? new Telegraf(process.env.BOT_TOKEN, {
+        telegram: {
+            agent: new httpProxyAgent({
+                host: process.env.PROXY_HOST,
+                port: process.env.PROXY_PORT
+            })
+        }
+    })
+    
+    // konfigurasi bot bawaan tanpa proxy.
+: new Telegraf(process.env.BOT_TOKEN),
+env = require('./src/function/env.function'),
+chat = require('./src/function/chat.function');
 
 // cache
 const thisBot = {
@@ -56,5 +70,7 @@ bot.action(/[\S]+/, (ctx) => chat(ctx, bot, Downloaded).inCallbackData())
 // fungsi menjalankan bot
 bot.launch()
     .finally(() => console.log('\x1b[36m', 'Launching....'))
-    .then(() => console.log('\x1b[32m','Bot is now running.'))
+    .then(() => proxy
+        ? console.log('\x1b[32m','Bot is now running with proxy!!.')
+    : console.log('\x1b[32m','Bot is now running.'))
     .catch((e) => console.log('\x1b[31m', e))

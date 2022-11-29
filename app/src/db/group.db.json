@@ -1,0 +1,9 @@
+[
+    {
+        "groupId": {
+            "registered": "date",
+            "greetings": true,
+            "allowNSFW": false
+        }
+    }
+]
